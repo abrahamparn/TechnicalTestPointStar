@@ -1,0 +1,21 @@
+{
+  "name": "technicaltestpointstar",
+  "version": "1.0.0",
+  "description": "a fullstack application for writing notes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "install-server": "npm install --prefix server",
+    "install-client": "npm install --prefix client",
+    "install-both": "npm run install-server && npm run install-client",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "deploy": "npm run build --prefix client && npm start --prefix server",
+    "watch": "concurrently \"npm run server\"  \"npm run client\""
+  },
+  "author": "abraham naiborhu",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.0"
+  }
+}
