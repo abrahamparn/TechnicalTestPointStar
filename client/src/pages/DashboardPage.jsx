@@ -5,6 +5,7 @@ import EditNoteModal from "../features/notes/components/EditNoteModal";
 import EditNoteForm from "../features/notes/components/EditNoteForm";
 import { useLogout } from "../features/auth/api";
 import SummarizeNoteModal from "../features/notes/components/SummarizeNoteModal";
+import { confirm } from "../lib/confirm.js";
 
 const DashboardPage = () => {
   const [editingNote, setEditingNote] = useState(null);
@@ -12,9 +13,13 @@ const DashboardPage = () => {
 
   const { mutate: doLogout, isPending } = useLogout();
 
-  const handleLogOut = () => {
-    if (window.confirm("Are you sure you want to log out?")) {
-      doLogout();
+  const handleLogOut = async () => {
+    const ok = await confirm("Log out?", "You will be signed out from this device.");
+    if (!ok) return;
+    try {
+      await doLogout(); // your hook already handles toasts + navigate on success/error
+    } catch (_) {
+      // no-op: useLogout onError already shows a toast and handles navigation for 401/419
     }
   };
 

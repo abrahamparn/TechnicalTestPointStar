@@ -3,6 +3,8 @@ import apiClient from "../../../api";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../../store/auth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { notify } from "../../../lib/notify";
+
 //axios post to create user
 const registerUser = async (data) => {
   const { userData } = await apiClient.post("/auth/", data);
@@ -18,12 +20,14 @@ export const userRegister = () => {
     onSuccess: (data) => {
       //! remove this in production
       console.log("Registration successfull:", data);
-      alert("Registration successful! Please check in your email for verification instructions.");
+      notify.success(
+        "Registration successful! Please check in your email for verification instructions."
+      );
       navigate("/login");
     },
     onError: (error) => {
       console.error("Registration failed:", error);
-      alert(`Registration failed: ${error.response?.data?.error || error.message}`); //! Change this later
+      notify.error(`Registration failed: ${error.response?.data?.error || error.message}`); //! Change this later
     },
   });
 };
@@ -41,7 +45,7 @@ export const userLogin = () => {
     mutationFn: loginUser,
     onSuccess: (data) => {
       console.log("Login successfull:", data);
-      alert("Login successful!");
+      notify.success("Welcome back!");
 
       if (data.accessToken) {
         setToken(data.accessToken);
@@ -50,7 +54,7 @@ export const userLogin = () => {
     },
     onError: (error) => {
       console.error("Login failed:", error);
-      alert(`Login failed: ${error.response?.data?.error || error.message}`);
+      notify.error(`Login failed: ${error.response?.data?.error || error.message}`);
     },
   });
 };
@@ -79,7 +83,7 @@ export const useRefreshToken = () => {
     onError: (error) => {
       console.log("onError", error);
       console.error("Session expired or invalid:", error); //user is logged out
-      alert(`Login failed: ${error.response?.data?.error || error.message}`);
+      notify.error(`Login failed: ${error.response?.data?.error || error.message}`);
     },
   });
 };
@@ -112,7 +116,7 @@ export const useLogout = () => {
       }
 
       console.error("Logout failed:", error);
-      alert(`Logout failed: ${error?.response?.data?.error || error.message}`);
+      notify.error(`Logout failed: ${error?.response?.data?.error || error.message}`);
     },
   });
 };

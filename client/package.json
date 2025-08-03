@@ -3,12 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-"scripts": {
-  "dev": "vite",                
-  "build": "vite build",         
-  "preview": "vite preview",
-  "lint": "eslint ."
-},
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint ."
+  },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
     "@tailwindcss/vite": "^4.1.11",
@@ -19,6 +19,9 @@
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.62.0",
     "react-router-dom": "^7.7.1",
+    "sonner": "^2.0.7",
+    "sweetalert2": "^11.22.2",
+    "sweetalert2-react-content": "^5.1.0",
     "tailwindcss": "^4.1.11",
     "zod": "^4.0.14",
     "zustand": "^5.0.7"

@@ -44,7 +44,7 @@ const RegisterForm = () => {
           type="text"
           {...register("name")}
           id="name"
-          className="mt-1 block w-full border border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
+          className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
           placeholder="Enter your name"
         />
         {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>}
@@ -59,7 +59,7 @@ const RegisterForm = () => {
           type="text"
           {...register("email")}
           id="email"
-          className="mt-1 block w-full border border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
+          className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
           placeholder="Enter your email"
         />
         {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
@@ -74,7 +74,7 @@ const RegisterForm = () => {
           type="text"
           {...register("username")}
           id="username"
-          className="mt-1 block w-full border border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
+          className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300"
           placeholder="Enter your email"
         />
         {errors.username && <p className="mt-1 text-sm text-red-500">{errors.username.message}</p>}
@@ -89,7 +89,7 @@ const RegisterForm = () => {
           type="password"
           {...register("password")}
           id="password"
-          className="mt-1 block w-full border border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300 
+          className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300 
           "
           placeholder="Enter your email"
         />
