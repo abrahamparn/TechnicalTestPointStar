@@ -120,3 +120,15 @@ export const useLogout = () => {
     },
   });
 };
+
+//User verification email hook
+const verifyEmailToken = async (token) => {
+  const { data } = await apiClient.get(`/auth/verify-email?token=${token}`);
+  return data;
+};
+
+export const useVerifyEmail = () => {
+  return useMutation({
+    mutationFn: verifyEmailToken,
+  });
+};

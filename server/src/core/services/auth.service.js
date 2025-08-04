@@ -40,14 +40,21 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       });
 
       //! CHANGE THIS LATER
-      const verificationUrl = `${env.DEVELOPMENT_URL}/auth/verify-email?token=${rawToken}`;
+      const verificationUrl = `${env.DEVELOPMENT_URL}=${rawToken}`;
 
       //! CHANGE THIS LATER
       await mailerService.sendEmail({
         to: email,
         subject: "Verify Your Email Address",
         text: `Please verify your email by clicking this link: ${verificationUrl}`,
-        html: `<p>Please verify your email by clicking this link: <a href="${verificationUrl}">Verify Email</a></p>`,
+        html: `<div><p>
+  Please verify your email by clicking this link:
+  <a href="${verificationUrl}">Verify Email</a>
+</p>
+<p>
+  If you cannot click the link, please copy and paste this URL into your browser:<br />
+  ${verificationUrl}
+</p></div>`,
       });
 
       const { password: _, ...userWithoutPassword } = user;
@@ -253,7 +260,7 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       const hashedForgetPasswordToken = crypto.createHash("sha256").update(rawToken).digest("hex");
       const forgetPasswordTokenExpires = new Date(Date.now() + 3600000); // 1 hour
 
-      const verificationUrl = `${env.DEVELOPMENT_URL}/auth/change-password?token=${rawToken}`;
+      const verificationUrl = `${env.DEVELOPMENT_URL_CHANGEPASSWORD}/auth/change-password?token=${rawToken}`;
 
       const version = Number(user.version) + 1;
       await authServiceRepository.updateResetToken({

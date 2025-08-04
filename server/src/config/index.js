@@ -23,6 +23,7 @@ const envSchema = z.object({
   MODEL_TOKEN: z.string(),
   AI_ENPOINT: z.string(),
   MODEL_NAME: z.string(),
+  DEVELOPMENT_URL_CHANGEPASSWORD: z.string(),
 });
 
 // validate at runtime
