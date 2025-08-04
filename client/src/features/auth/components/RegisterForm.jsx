@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
 
-//! Later on, if have time, move to centralized validation
+//registarion checker using zod
 const registerSchema = z.object({
   email: z.string().email("A valid email is required"),
   password: z.string().min(8, "Password must be atleast 8 characters long"),
@@ -23,11 +23,11 @@ const RegisterForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(registerSchema), //use the zod here to check
   });
 
   const onSubmit = (data) => {
-    registerUser(data);
+    registerUser(data); //when validation passes, will cal this to register user
   };
 
   return (
@@ -67,7 +67,7 @@ const RegisterForm = () => {
         {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
       </div>
 
-      {/* email */}
+      {/* username */}
       <div>
         <label htmlFor="username" className="block text-sm font-medium text-gray-700">
           Username
@@ -87,14 +87,7 @@ const RegisterForm = () => {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Password
         </label>
-        {/* <input
-          type="password"
-          {...register("password")}
-          id="password"
-          className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300 
-          "
-          placeholder="Enter your email"
-        /> */}
+
         <div className="relative">
           <input
             type={seePassword ? "text" : "password"}
