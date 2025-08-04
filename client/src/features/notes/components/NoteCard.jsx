@@ -1,12 +1,14 @@
 import { useDeleteNote } from "../api";
-
+import { confirm } from "../../../lib/confirm";
 const NoteCard = ({ note, onEdit, onSummarize }) => {
   const { mutate: removeNote, isPending } = useDeleteNote();
 
-  const handleDelete = () => {
-    if (window.confirm("Are you sure you want to delete this note?")) {
-      removeNote(note.note_id);
-    }
+  const handleDelete = async () => {
+    const ok = await confirm("Delete Note?", "you will not recover this again.");
+    if (!ok) return;
+    try {
+      await removeNote(note.note_id);
+    } catch (_) {}
   };
 
   return (
