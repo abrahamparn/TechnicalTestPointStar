@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 
 const EditNoteModal = ({ isOpen, onClose, children }) => {
+  // logic on closing and opening modal
   useEffect(() => {
     // Disable body scroll when the modal is open
     document.body.style.overflow = isOpen ? "hidden" : "unset";

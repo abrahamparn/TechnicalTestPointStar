@@ -9,7 +9,7 @@ const PublicRoute = () => {
   if (isAuthenticated) {
     return <Navigate to="/" replace />;
   }
-  return <Outlet />;
+  return <Outlet />; // if authenticated is false, will go to login
 };
 
 export default PublicRoute;

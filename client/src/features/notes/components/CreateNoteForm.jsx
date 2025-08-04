@@ -3,6 +3,7 @@ import { useCreateNote } from "../api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
+//note schema for validation when entering a new note
 const createNoteSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "content is required"),
@@ -16,14 +17,13 @@ const CreateNoteForm = () => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(createNoteSchema),
+    resolver: zodResolver(createNoteSchema), //registering the zod schema
   });
   const { mutate: addNote, isPending } = useCreateNote();
 
   const onSubmit = (data) => {
     addNote(data, {
       onSuccess: () => {
-        console.log("mutation success");
         reset();
       },
       onError: (e) => console.error("mutation error", e),
@@ -33,7 +33,9 @@ const CreateNoteForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mb-8 p-4 bg-gray-100 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Add a New Note</h2>
+      {/* title and content */}
       <div className="space-y-4">
+        {/* title */}
         <div>
           <label htmlFor="title" className="block text-sm font-medium text-gray-700">
             title
@@ -48,6 +50,7 @@ const CreateNoteForm = () => {
           {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
         </div>
 
+        {/* content */}
         <div>
           <label htmlFor="content" className="block text-sm font-medium text-gray-700">
             content
@@ -62,6 +65,7 @@ const CreateNoteForm = () => {
           {errors.title && <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>}
         </div>
         <div>
+          {/* submit button */}
           <button
             type="submit"
             disabled={isPending}

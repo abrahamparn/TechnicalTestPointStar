@@ -12,6 +12,7 @@ const queryClient = new QueryClient({
   },
 });
 
+//Provides React Query client with global config for data fetching and caching.
 export const AppProviders = ({ children }) => {
   return (
     <QueryClientProvider client={queryClient}>

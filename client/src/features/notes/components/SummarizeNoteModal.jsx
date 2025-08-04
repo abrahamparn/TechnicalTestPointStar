@@ -3,13 +3,7 @@ import { useEffect } from "react";
 const SummarizeNoteModal = ({ isOpen, onClose, noteToSummarize }) => {
   const { mutate, data, isPending, isSuccess, isError, error, reset } = useSummarizeNote();
 
-  // useEffect(() => {
-  //   document.body.style.overflow = isOpen ? "hidden" : "unset";
-  //   if (!isOpen) {
-  //     reset();
-  //   }
-  // }, [isOpen, reset]);
-
+  //logic on closing and opening modal
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -35,7 +29,7 @@ const SummarizeNoteModal = ({ isOpen, onClose, noteToSummarize }) => {
     >
       <div
         className="relative w-full max-w-2xl p-6 bg-white rounded-lg shadow-xl"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
       >
         <h2 className="text-2xl font-bold mb-4">AI-Powered Summary</h2>
 

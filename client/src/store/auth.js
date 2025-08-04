@@ -2,6 +2,7 @@
 
 import { create } from "zustand";
 
+// main holder for authentication
 export const useAuthStore = create((set) => ({
   accessToken: null,
   isAuthenticated: false,

@@ -33,6 +33,7 @@ export const useCreateNote = () => {
   });
 };
 
+// soft delete any notes
 const deleteNote = async (noteId) => {
   await apiClient.delete(`/note/${noteId}`);
 };
@@ -48,6 +49,7 @@ export const useDeleteNote = () => {
   });
 };
 
+// call backend to edit the note
 const editNote = async ({ noteId, data }) => {
   const response = await apiClient.patch(`/note/${noteId}`, data);
   return response.data;
@@ -67,7 +69,6 @@ export const useUpdateNote = () => {
 // All for the AI
 const summarizeNote = async (noteId) => {
   const { data } = await apiClient.get(`/note/${noteId}/summarize`);
-  console.log("data", data);
   return data;
 };
 

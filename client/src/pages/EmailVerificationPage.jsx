@@ -4,9 +4,11 @@ import { Link, useSearchParams } from "react-router-dom";
 
 const EmailVerificationPage = () => {
   const [searchParams] = useSearchParams();
+  // get token from parameter '?'
   const token = searchParams.get("token");
   const { mutate, isPending, isSuccess, isError, error } = useVerifyEmail();
 
+  // directly check to server
   useEffect(() => {
     if (token) {
       mutate(token);

@@ -8,6 +8,10 @@ import App from "./App.jsx";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <App />
+    {/* // Initialize global toast notifications using Sonner
+        // - richColors: enables gradient-based toasts
+        // - closeButton: adds manual dismissal option
+        // For customization, see: https://sonner.emilkowal.ski */}
     <Toaster richColors closeButton />
   </StrictMode>
 );

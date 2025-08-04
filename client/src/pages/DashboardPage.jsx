@@ -1,5 +1,5 @@
 import NotesList from "../features/notes/components/NotesList";
-import CreateNoteForm from "../features/notes/components/CreateNoteForm"; // Import the form
+import CreateNoteForm from "../features/notes/components/CreateNoteForm";
 import { useState } from "react";
 import EditNoteModal from "../features/notes/components/EditNoteModal";
 import EditNoteForm from "../features/notes/components/EditNoteForm";
@@ -17,10 +17,8 @@ const DashboardPage = () => {
     const ok = await confirm("Log out?", "You will be signed out from this device.");
     if (!ok) return;
     try {
-      await doLogout(); // your hook already handles toasts + navigate on success/error
-    } catch (_) {
-      // no-op: useLogout onError already shows a toast and handles navigation for 401/419
-    }
+      await doLogout();
+    } catch (_) {}
   };
 
   return (
@@ -35,9 +33,8 @@ const DashboardPage = () => {
           {isPending ? "Logging out..." : "Log out"}
         </button>
       </div>
-      <CreateNoteForm /> {/* Add the form here */}
+      <CreateNoteForm />
       <NotesList onEditNote={setEditingNote} onSummarize={setSummarizing} />{" "}
-      {/* Pass the state setter down */}
       <EditNoteModal isOpen={!!editingNote} onClose={() => setEditingNote(null)}>
         <EditNoteForm noteToEdit={editingNote} onClose={() => setEditingNote(null)} />
       </EditNoteModal>

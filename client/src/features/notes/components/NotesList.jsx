@@ -6,11 +6,12 @@ const NotesList = ({ onEditNote, onSummarize }) => {
   const { data: notes, isLoading, isError, error } = useNotes();
   const [query, setQuery] = useState("");
 
+  // Search feature to search for anything realted to the title
   const filteredNotes = useMemo(() => {
     if (!notes) return [];
     const q = query.trim().toLowerCase();
     if (!q) return notes;
-    return notes.filter((n) => (n.title || "").toLowerCase().includes(q));
+    return notes.filter((n) => (n.title || "").toLowerCase().includes(q)); //main logic
   }, [notes, query]);
 
   if (isLoading) {

@@ -8,7 +8,7 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  return <Outlet />; //if isAuthenticated == true, will go to protectedroute
 };
 
 export default ProtectedRoute;

@@ -5,7 +5,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const EditNoteForm = ({ noteToEdit, onClose }) => {
-  const registerSchema = z.object({
+  //editing note validation
+  const editNoteSchema = z.object({
     title: z.string().min(1, "Title is required"),
     content: z.string().min(1, "content is required"),
   });
@@ -16,21 +17,24 @@ const EditNoteForm = ({ noteToEdit, onClose }) => {
     reset,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver: zodResolver(editNoteSchema), //registering the validation here
     defaultValues: {
       title: noteToEdit?.title || "",
       content: noteToEdit?.content || "",
     },
   });
 
+  //encapsulates the API logic for updating a note.
   const { mutate: editNote, isPending } = useUpdateNote();
 
+  //resetting notes after submitting
   useEffect(() => {
     if (noteToEdit) {
       reset({ title: noteToEdit.title, content: noteToEdit.content });
     }
   }, [noteToEdit, reset]);
 
+  //saving to server and closing modal
   const onSubmit = (data) => {
     editNote(
       { noteId: noteToEdit.note_id, data },

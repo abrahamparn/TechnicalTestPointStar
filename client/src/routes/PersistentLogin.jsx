@@ -8,6 +8,7 @@ const PersistentLogin = () => {
   const { refetch, isFetching } = useRefreshToken();
   const [isLoading, setIsLoading] = useState(true);
 
+  // will try to check the token. if there is no token it will go to another outlet
   useEffect(() => {
     const verifyUser = async () => {
       if (!isAuthenticated) {
@@ -35,7 +36,7 @@ const PersistentLogin = () => {
     );
   }
 
-  return <Outlet />;
+  return <Outlet />; //the path finder of probable route when setToken is existing or not
 };
 
 export default PersistentLogin;
