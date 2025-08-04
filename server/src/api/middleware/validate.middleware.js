@@ -3,7 +3,6 @@ import { AppError } from "../../core/errors/appError.js";
 // This middleware factory takes a Zod schema
 export const validate = (schema) => async (req, res, next) => {
   try {
-    console.log("req zod", req.body);
     // Zod's parseAsync will check the request against the schema
     await schema.parseAsync({
       body: req.body,
