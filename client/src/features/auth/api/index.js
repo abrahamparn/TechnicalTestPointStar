@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notify } from "../../../lib/notify";
 
 //axios post to create user
+// Will receive data of name, email username, and password
 const registerUser = async (data) => {
   const { userData } = await apiClient.post("/auth/", data);
   return userData;
@@ -18,20 +19,20 @@ export const userRegister = () => {
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (data) => {
-      //! remove this in production
-      console.log("Registration successfull:", data);
       notify.success(
         "Registration successful! Please check in your email for verification instructions."
       );
+      //if successfull will navigate to login
       navigate("/login");
     },
     onError: (error) => {
-      console.error("Registration failed:", error);
-      notify.error(`Registration failed: ${error.response?.data?.error || error.message}`); //! Change this later
+      notify.error(`Registration failed: ${error.response?.data?.error || error.message}`);
     },
   });
 };
 
+// api hit to login
+// need to have password and email
 const loginUser = async (userData) => {
   const { data } = await apiClient.post("/auth/login", userData, { withCredentials: true });
   return data;
@@ -44,13 +45,12 @@ export const userLogin = () => {
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
-      console.log("Login successfull:", data);
       notify.success("Welcome back!");
 
       if (data.accessToken) {
         setToken(data.accessToken);
       }
-      navigate("/");
+      navigate("/"); // after successfull will go to dashboard
     },
     onError: (error) => {
       console.error("Login failed:", error);
@@ -59,6 +59,8 @@ export const userLogin = () => {
   });
 };
 
+// Will be called whenever you reload
+// will be taking the cookie
 const refreshToken = async () => {
   const { data } = await apiClient.post("/auth/refresh");
   console.log("data refreshToken", data);
@@ -74,20 +76,19 @@ export const useRefreshToken = () => {
     enabled: false,
     retry: false,
     onSuccess: (data) => {
-      console.log("data onSuccess", data);
-      console.log("data onSuccess");
       if (data.accessToken) {
         setToken(data.accessToken);
       }
     },
     onError: (error) => {
-      console.log("onError", error);
       console.error("Session expired or invalid:", error); //user is logged out
       notify.error(`Login failed: ${error.response?.data?.error || error.message}`);
     },
   });
 };
 
+//Logging out
+// will get to the logout api
 const doLogOut = async () => {
   const { data } = await apiClient.post("/auth/logOut");
   return data;
@@ -102,8 +103,7 @@ export const useLogout = () => {
     mutationFn: doLogOut,
     onSuccess: () => {
       queryClient.clear();
-      logout();
-      console.log("navigating to login");
+      logout(); // removing the accesstoken
       navigate("/login", { replace: true });
     },
     onError: (error) => {
@@ -115,7 +115,6 @@ export const useLogout = () => {
         return;
       }
 
-      console.error("Logout failed:", error);
       notify.error(`Logout failed: ${error?.response?.data?.error || error.message}`);
     },
   });
