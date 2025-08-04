@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { userLogin } from "../api";
+import { useState } from "react";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -10,7 +11,7 @@ const loginSchema = z.object({
 
 export const LoginForm = () => {
   const { mutate: loginUser, isPending } = userLogin();
-
+  const [seePassword, setSeePassword] = useState(false);
   const {
     register,
     handleSubmit,
@@ -46,12 +47,27 @@ export const LoginForm = () => {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Password
         </label>
-        <input
+        {/* <input
           type="password"
           {...register("password")}
           id="password"
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-        />
+        /> */}
+        <div className="relative">
+          <input
+            type={seePassword ? "text" : "password"}
+            {...register("password")}
+            id="password"
+            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+          />
+          <button
+            type="button"
+            onClick={() => setSeePassword((prev) => !prev)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500 hover:text-gray-700"
+          >
+            {seePassword ? "Hide" : "Show"}
+          </button>
+        </div>
         {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
       </div>
       {/* SUBMIT BUTTON */}

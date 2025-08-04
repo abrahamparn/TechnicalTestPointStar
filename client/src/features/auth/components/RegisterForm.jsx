@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { userRegister } from "../api";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useState } from "react";
 
 //! Later on, if have time, move to centralized validation
 const registerSchema = z.object({
@@ -14,6 +15,7 @@ const registerSchema = z.object({
 const RegisterForm = () => {
   //mutate function and loading state
   const { mutate: registerUser, isPending } = userRegister();
+  const [seePassword, setSeePassword] = useState(false);
 
   // useForm hook
   const {
@@ -85,14 +87,29 @@ const RegisterForm = () => {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Password
         </label>
-        <input
+        {/* <input
           type="password"
           {...register("password")}
           id="password"
           className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300 
           "
           placeholder="Enter your email"
-        />
+        /> */}
+        <div className="relative">
+          <input
+            type={seePassword ? "text" : "password"}
+            {...register("password")}
+            id="password"
+            className="mt-1 block w-full border py-1 border-gray-200 rounded-md placeholder-gray-200 focus:outline-none focus:ring-green-300 focus:border-green-300 "
+          />
+          <button
+            type="button"
+            onClick={() => setSeePassword((prev) => !prev)}
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm text-gray-500 hover:text-gray-700"
+          >
+            {seePassword ? "Hide" : "Show"}
+          </button>
+        </div>
         {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>}
       </div>
 

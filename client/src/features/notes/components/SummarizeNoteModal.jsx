@@ -1,21 +1,28 @@
-import { useEffect } from "react";
 import { useSummarizeNote } from "../api";
-
+import { useEffect } from "react";
 const SummarizeNoteModal = ({ isOpen, onClose, noteToSummarize }) => {
   const { mutate, data, isPending, isSuccess, isError, error, reset } = useSummarizeNote();
 
-  useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "unset";
-    if (!isOpen) {
-      reset();
-    }
-  }, [isOpen, reset]);
+  // useEffect(() => {
+  //   document.body.style.overflow = isOpen ? "hidden" : "unset";
+  //   if (!isOpen) {
+  //     reset();
+  //   }
+  // }, [isOpen, reset]);
 
-  const handleGenerateSummary = () => {
-    if (noteToSummarize) {
-      mutate(noteToSummarize.note_id);
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      if (noteToSummarize) {
+        mutate(noteToSummarize.note_id);
+      }
     }
-  };
+
+    return () => {
+      document.body.style.overflow = "unset";
+      reset();
+    };
+  }, [isOpen, noteToSummarize, mutate, reset]); // Dependencies for the effect
 
   if (!isOpen) {
     return null;
@@ -31,33 +38,27 @@ const SummarizeNoteModal = ({ isOpen, onClose, noteToSummarize }) => {
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-2xl font-bold mb-4">AI-Powered Summary</h2>
-        <div className="p-4 border rounded-md bg-gray-50 min-h-[200px]">
-          {/* Default state: show the button */}
-          {!isPending && !isSuccess && !isError && (
-            <div className="text-center flex flex-col items-center justify-center h-full">
-              <p className="mb-4">Click the button to generate a summary for this note.</p>
-              <button
-                onClick={handleGenerateSummary}
-                className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
-              >
-                Generate Summary
-              </button>
-            </div>
-          )}
 
-          {/* Loading state */}
-          {isPending && <p>🧠 Generating summary, please wait...</p>}
+        <div className="p-4 border rounded-md bg-gray-50 min-h-[200px] flex items-center justify-center">
+          {isPending && <p className="text-gray-600">Generating summary, please wait...</p>}
 
-          {/* Success state */}
           {isSuccess && (
-            <div>
-              <h3 className="font-semibold mb-2">Summary:</h3>
-              <p className="whitespace-pre-wrap">{data.summary}</p>
+            <div className="w-full">
+              <h3 className="font-semibold mb-2 text-gray-800">Summary:</h3>
+              <p className="text-gray-700 whitespace-pre-wrap">
+                {data?.summary || "No summary was returned."}
+              </p>
             </div>
           )}
 
-          {/* Error state */}
-          {isError && <p className="text-red-600">Error: {error.message}</p>}
+          {isError && (
+            <div className="text-center">
+              <h3 className="font-semibold text-red-600 mb-2">Could Not Generate Summary</h3>
+              <p className="text-gray-600">
+                The AI is currently unavailable. Please try again later.
+              </p>
+            </div>
+          )}
         </div>
 
         <button
