@@ -1,6 +1,6 @@
 /**
  *
- * All the necessary data operations for api
+ * All the necessary data operations for api authentication
  * Starting from finding data using email, username, and id
  * to data mutation
  */
