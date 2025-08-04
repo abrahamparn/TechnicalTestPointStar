@@ -15,7 +15,6 @@ import { disconnect as dbDisconnect } from "./infra/db/index.js";
 
 // Developing purposes
 import { healthRouter } from "./api/v1/system/health.router.js";
-import { testDbRouter } from "./api/v1/testDb/testDb.router.js";
 
 // di container
 import container from "./container.js";
@@ -47,8 +46,6 @@ app.use((req, res, next) => {
 });
 // Routes
 app.use("/api/v1/healthz", healthRouter);
-// Test db router
-app.use("/api/v1/testDb", testDbRouter);
 
 // Features
 app.use("/api/v1/auth", authRouter);

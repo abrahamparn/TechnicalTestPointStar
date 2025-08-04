@@ -1,3 +1,13 @@
+/**
+ * Notes Controller
+ *
+ * Handles all CRUD operations and summarization logic for user notes:
+ * - Create, edit, fetch, and delete notes
+ * - Summarize note content
+ *
+ * All methods assume user authentication has been performed,
+ * and `req.user.userId` is available via middleware.
+ */
 export default {
   async createNote(req, res, next) {
     try {

@@ -1,4 +1,9 @@
+/**
+ * Everything here is delegated to service for better readability
+ */
 export default {
+  // will register a new user account
+  // if successfull will return 201
   async createUser(req, res, next) {
     try {
       const authService = req.scope.resolve("authService");
@@ -12,6 +17,9 @@ export default {
       next(exception);
     }
   },
+
+  // verifies user's email via token from query 'token'
+  //will return 201 if successful
   async verifyEmail(req, res, next) {
     try {
       const authService = req.scope.resolve("authService");
@@ -28,6 +36,8 @@ export default {
     }
   },
 
+  //receives email and password
+  // if successfull, return access token and httpOnly refresh token
   async loginUser(req, res, next) {
     try {
       const authService = req.scope.resolve("authService");
@@ -49,6 +59,7 @@ export default {
     }
   },
 
+  // will getuser details based on user id from token
   async getMe(req, res, next) {
     try {
       const authService = req.scope.resolve("authService");
@@ -64,9 +75,9 @@ export default {
     }
   },
 
+  // will return a new access token
   async refreshToken(req, res, next) {
     try {
-      console.log("LAH ANEH");
       const refreshToken = req.cookies.refreshToken;
 
       const authService = req.scope.resolve("authService");
@@ -78,6 +89,7 @@ export default {
     }
   },
 
+  // will invalidate refreshtoken by increasing the refresh_token_version
   async logOut(req, res, next) {
     try {
       const refreshToken = req.cookies.refreshToken;
@@ -90,6 +102,7 @@ export default {
     }
   },
 
+  // able to change password based on newly inputted pasword and ofcourse the  token
   async changePassword(req, res, next) {
     try {
       const user = req.user;
@@ -104,6 +117,7 @@ export default {
     }
   },
 
+  // Sends a password reset email if the email is registered.
   async forgetPasswordEmail(req, res, next) {
     try {
       const email = req.body.email;
@@ -118,6 +132,7 @@ export default {
       next(exception);
     }
   },
+  //Resets password using a token and new credentials.
   async forgetPassword(req, res, next) {
     try {
       const { token, newPassword, reNewPassword } = req.body;
@@ -132,6 +147,7 @@ export default {
       next(exception);
     }
   },
+  //Updates user data based on user ID extracted from the token.
   async updateUserData(req, res, next) {
     try {
       const authService = req.scope.resolve("authService");

@@ -4,6 +4,11 @@ import { logger } from "../logger/index.js";
 
 let prisma; // lazily initialized
 
+/**
+ * Returns a singleton instance of PrismaClient.
+ * Automatically configures query logging based on NODE_ENV.
+ * Ensures that only one PrismaClient instance is used across the app.
+ */
 export function getClient() {
   if (!prisma) {
     prisma = new PrismaClient({

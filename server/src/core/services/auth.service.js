@@ -8,8 +8,22 @@ import {
   NotFoundError,
 } from "../errors/httpErrors.js";
 
+/**
+ *
+ * Factory function for building the authentication service.
+ * Encapsulates business logic for registration, login, token issuance, email verification,
+ * password reset, and user profile management.
+ *
+ */
+
 export function makeAuthService({ authServiceRepository, env, mailerService }) {
   return {
+    /**
+     * Register a new user.
+     * - Checks for existing email/username
+     * - Hashes password and stores user
+     * - Sends verification email with token
+     */
     async register({ email, name, username, password, role }) {
       let doesEmailExists = await authServiceRepository.findByEmail({ email });
       if (doesEmailExists) {
@@ -23,12 +37,15 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       const saltRounds = env.BCRYPT_ROUNDS;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+      // Generate raw verification token (to send via email)
       const rawToken = crypto.randomBytes(64).toString("hex");
 
+      // Hash the token before storing it in DB
       const hashedToken = crypto.createHash("sha256").update(rawToken).digest("hex");
 
       const tokenExpires = new Date(Date.now() + 3600000); // 1 hour
 
+      // Create user record in DB
       const user = await authServiceRepository.create({
         email,
         name,
@@ -39,28 +56,31 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         verificationTokenExpires: tokenExpires,
       });
 
-      //! CHANGE THIS LATER
+      // Generate verification URL for email link
       const verificationUrl = `${env.DEVELOPMENT_URL}=${rawToken}`;
 
-      //! CHANGE THIS LATER
+      // send verification email
       await mailerService.sendEmail({
         to: email,
         subject: "Verify Your Email Address",
         text: `Please verify your email by clicking this link: ${verificationUrl}`,
         html: `<div><p>
-  Please verify your email by clicking this link:
-  <a href="${verificationUrl}">Verify Email</a>
-</p>
-<p>
-  If you cannot click the link, please copy and paste this URL into your browser:<br />
-  ${verificationUrl}
-</p></div>`,
+          Please verify your email by clicking this link:
+          <a href="${verificationUrl}">Verify Email</a>
+        </p>
+        <p>
+          If you cannot click the link, please copy and paste this URL into your browser:<br />
+          ${verificationUrl}
+        </p></div>`,
       });
-
+      // Exclude password before returning user
       const { password: _, ...userWithoutPassword } = user;
       return userWithoutPassword;
     },
 
+    /**
+     * Verifies user email using the token from the link.
+     */
     async verifyEmail({ token }) {
       if (!token) {
         throw new UnauthorizedError("Wrong token/already used/token already expired");
@@ -94,9 +114,11 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         version: bumpedVersion,
       });
     },
+
+    /**
+     * Logs in a user and issues access and refresh tokens.
+     */
     async loginUser({ email, password }) {
-      // ! Problem with last_login -> Date is wrong, should be current date
-      //is user exists?
       const user = await authServiceRepository.findByEmail({ email });
 
       if (!user) {
@@ -140,6 +162,10 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
 
       return { accessToken, refreshToken };
     },
+
+    /**
+     * Retrieves authenticated user profile.
+     */
     async getMe({ id }) {
       const user = await authServiceRepository.findById({ id: id.userId });
 
@@ -156,6 +182,10 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         phoneNumber: user.phone_number || null,
       };
     },
+
+    /**
+     * Refreshes access token using valid refresh token.
+     */
     async refreshToken({ refreshToken }) {
       if (!refreshToken) {
         throw new UnauthorizedError("There is no refresh token");
@@ -192,6 +222,10 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       );
       return { accessToken };
     },
+
+    /**
+     * Invalidates refresh token by incrementing refresh version (token).
+     */
     async logOut({ refreshToken }) {
       if (!refreshToken) {
         throw new UnauthorizedError("There is no refresh token");
@@ -222,6 +256,9 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       return;
     },
 
+    /**
+     * Allows user to change password (with current password verification).
+     */
     async changePassword({ user, password, newPassword, reNewPassword }) {
       const userData = await authServiceRepository.findById({ id: user.userId });
 
@@ -247,6 +284,10 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         newPassword: newHashedPassword,
       });
     },
+
+    /**
+     * Initiates password reset via email with reset token.
+     */
     async forgetPasswordEmail({ email }) {
       const user = await authServiceRepository.findByEmail({ email });
 
@@ -270,7 +311,6 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         version: version,
       });
 
-      //! CHANGE THIS LATER
       await mailerService.sendEmail({
         to: email,
         subject: "Reset your password now",
@@ -279,6 +319,9 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
       });
     },
 
+    /**
+     * Completes password reset using a valid token.
+     */
     async forgetPassword({ token, newPassword, reNewPassword }) {
       if (!token) {
         throw new UnauthorizedError("Token not found");
@@ -315,6 +358,10 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
         hashedPassword,
       });
     },
+
+    /**
+     * Updates user data (e.g., username, phone) with optimistic locking.
+     */
     async updateUserData({ updateData, userId }) {
       const user = await authServiceRepository.findById({ id: userId });
       if (!user) {

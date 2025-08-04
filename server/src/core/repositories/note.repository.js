@@ -1,3 +1,8 @@
+/**
+ *
+ * All the necessary data operations for api notes authentication
+ * Starting from finding note id, data mutation, to deletion
+ */
 export function makeNoteRepository({ prisma }) {
   return {
     findById({ note_id }) {

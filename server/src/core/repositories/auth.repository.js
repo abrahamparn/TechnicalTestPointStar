@@ -1,3 +1,9 @@
+/**
+ *
+ * All the necessary data operations for api
+ * Starting from finding data using email, username, and id
+ * to data mutation
+ */
 export function makeAuthRepository({ prisma }) {
   return {
     findByEmail({ email }) {

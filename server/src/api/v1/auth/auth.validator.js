@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+/**
+ * Auth Validation Schemas (Zod)
+ *
+ * These schemas validate incoming request bodies for all authentication routes.
+ */
 export const registerSchema = z.object({
   body: z.object({
     email: z.string().email("A valid email is required"),

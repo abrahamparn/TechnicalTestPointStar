@@ -1,3 +1,15 @@
+/**
+ * Auth Router
+ *
+ * Defines all authentication-related API routes:
+ * - Registration, Login, Logout
+ * - Email verification & session refresh
+ * - Password management (change, forget, reset)
+ * - Get & update user profile
+ *
+ * Includes request schema validation and middleware-based auth protection.
+ */
+
 import express from "express";
 import authController from "./auth.controller.js";
 import { authMiddleWare } from "../../../infra/security/auth.middleware.js";

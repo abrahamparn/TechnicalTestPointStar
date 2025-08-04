@@ -1,16 +1,22 @@
 import jwt, { decode } from "jsonwebtoken";
 import { UnauthorizedError } from "../../core/errors/httpErrors.js";
 
+// Authentication middleware for Express routes.
+
 export async function authMiddleWare(req, res, next) {
   const authHeader = req.headers.authorization;
+
+  // Ensure the request contains an Authorization header with a Bearer token
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     throw new UnauthorizedError("No token provided, authorization denied.");
   }
 
+  // Extract the token value from the Authorization header
   const token = authHeader.split(" ")[1];
 
   try {
+    // Resolve environment configuration and secret
     const env = req.scope.resolve("env");
     const decoded = jwt.verify(token, env.JWT_SECRET);
 
@@ -21,6 +27,7 @@ export async function authMiddleWare(req, res, next) {
       throw new UnauthorizedError("Token is not valid");
     }
 
+    // Attach authenticated user context to request object
     req.user = {
       userId: decoded.userId,
       role: decoded.role,
@@ -28,6 +35,7 @@ export async function authMiddleWare(req, res, next) {
     };
     next();
   } catch (exception) {
+    // Log exception for debugging (only in dev; avoid logging tokens in prod)
     console.log("exception", exception);
     throw new UnauthorizedError("Token is not valid");
   }

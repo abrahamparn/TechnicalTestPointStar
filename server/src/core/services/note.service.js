@@ -7,8 +7,15 @@ import {
 
 import OpenAI from "openai";
 
+/**
+ * Factory function for building the note service.
+ * Handles CRUD operations for notes and integrates with OpenAI for summarization.
+ */
 export function makeNoteService({ noteServiceRepository, env }) {
   return {
+    /**
+     * Creates a new note for the user.
+     */
     async createNote({ title, content, user_id }) {
       const note = await noteServiceRepository.create({
         title,
@@ -17,6 +24,10 @@ export function makeNoteService({ noteServiceRepository, env }) {
       });
       return note;
     },
+
+    /**
+     * Edits an existing note if it belongs to the user.
+     */
     async editNote({ note_id, title, content, user_id }) {
       if (note_id === undefined) {
         throw new ValidationError("note_id is required");
@@ -40,6 +51,10 @@ export function makeNoteService({ noteServiceRepository, env }) {
 
       return note;
     },
+
+    /**
+     * Retrieves a specific note belonging to the user.
+     */
     async getOneNote({ note_id, user_id }) {
       if (note_id === undefined) {
         throw new ValidationError("note_id is required");
@@ -60,11 +75,18 @@ export function makeNoteService({ noteServiceRepository, env }) {
       }
       return note;
     },
+
+    /**
+     * Retrieves all notes for the specified user.
+     */
     async getAllNote({ user_id }) {
       const notes = await noteServiceRepository.findByUserId({ user_id });
       return notes;
     },
 
+    /**
+     * Deletes a note if it belongs to the user.
+     */
     async deleteNote({ user_id, note_id }) {
       if (note_id === undefined) {
         throw new ValidationError("note_id is required");
@@ -82,6 +104,9 @@ export function makeNoteService({ noteServiceRepository, env }) {
       }
     },
 
+    /**
+     * Uses OpenAI API to summarize a user's note.
+     */
     async summarizeNote({ user_id, note_id }) {
       const note = await noteServiceRepository.findByIdAndUserId({
         note_id: Number(note_id),
@@ -98,6 +123,7 @@ export function makeNoteService({ noteServiceRepository, env }) {
         const modelName = env.MODEL_NAME;
         const client = new OpenAI({ baseURL: endpoint, apiKey: token });
 
+        // Prepare a prompt to instruct the model to summarize the note
         const response = await client.chat.completions.create({
           model: modelName,
           messages: [
@@ -114,6 +140,8 @@ export function makeNoteService({ noteServiceRepository, env }) {
           temperature: 0.7,
           max_tokens: 100,
         });
+
+        // Return the generated summary
         return response.choices[0].message.content;
       } catch (error) {
         console.error("AI summarization failed:", error.message);

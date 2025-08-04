@@ -2,10 +2,6 @@ import { createContainer, asFunction, asValue } from "awilix";
 import { getClient } from "./infra/db/index.js";
 import { logger } from "./infra/logger/index.js";
 import { env } from "./config/index.js";
-import { makeTestDbRepository } from "./core/repositories/testDb.repository.js";
-
-// test import //! Remove this later
-import { makeTestDbService } from "./core/services/testDb.service.js";
 
 // Authentication import
 import { makeAuthService } from "./core/services/auth.service.js";
@@ -30,9 +26,6 @@ container.register({
 
 // Core application components
 container.register({
-  testDbRepository: asFunction(makeTestDbRepository).singleton(),
-  testDbService: asFunction(makeTestDbService).singleton(),
-
   // Authentication service
   authService: asFunction(makeAuthService).singleton(),
   authServiceRepository: asFunction(makeAuthRepository).singleton(),
