@@ -4,6 +4,8 @@ import { z } from "zod";
 import { userLogin } from "../api";
 import { useState } from "react";
 
+// Validation on login.
+// only check email and password
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
@@ -17,10 +19,10 @@ export const LoginForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(loginSchema), //connecting zod for validation
   });
   const onSubmit = (data) => {
-    loginUser(data);
+    loginUser(data); //after all validation, will call this
   };
 
   return (
@@ -47,12 +49,6 @@ export const LoginForm = () => {
         <label htmlFor="password" className="block text-sm font-medium text-gray-700">
           Password
         </label>
-        {/* <input
-          type="password"
-          {...register("password")}
-          id="password"
-          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
-        /> */}
         <div className="relative">
           <input
             type={seePassword ? "text" : "password"}
