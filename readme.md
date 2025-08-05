@@ -1,5 +1,43 @@
 # Smart Notes AI Application
 
+## List of content
+
+- [Overview](#overview)
+- [Core Feature](#core-feature)
+- [Architectural Decisions & Design Rationale](#architectural-decisions--design-rationale)
+  - [Backend Architecture](#backend-architecture)
+  - [Frontend Architecture](#frontend-architecture)
+  - [AI Rationale](#ai-rationale)
+- [Backend Documentation](#backend-documentation)
+  - [Project Structure and Tech Stack](#project-structure-and-tech-stack)
+    - [A. Project Structure](#a-project-structure)
+    - [B. Tech Stack](#b-tech-stack)
+  - [Features](#features)
+  - [Getting Started](#getting-startend)
+    - [A. Setup your .env.](#a-setup-your-env)
+    - [B. Download projcet](#b-download-projcet)
+  - [API Endpoints](#api-endpoints)
+  - [Authentication](#authentication)
+  - [Database](#database)
+    - [Database Situation](#database-situation)
+  - [Logging](#logging)
+  - [Error Handling](#error-handling)
+  - [Testing](#testing)
+- [Client Documentation](#client-documentation)
+  - [Overview (Client)](#overview-1)
+    - [Secure Authentication](#secure-authentication)
+    - [Full Notes Management (CRUD)](#full-notes-management-crud)
+    - [AI-Powered Summarization](#ai-powered-summarization)
+    - [Modern User Experience](#modern-user-experience)
+  - [Tech Stack (Client)](#tech-stack-1)
+  - [Getting Startend](#getting-startend)
+    - [Prerequisites](#prerequisites)
+    - [Installation](#installation)
+  - [Folder Structure](#folder-stucture)
+- [How to Run Both of Them](#how-to-run-both-of-them)
+  - [What if /server/public is not there?](#what-if-serverpublic-is-not-there)
+- [Screenshot of the Application](#screenshot-of-the-application)
+
 ## Overview
 
 A full-stack note-taking application featuring secure user authentication, full CRUD functionality, and an AI-powered note summarization feature.
@@ -23,7 +61,6 @@ Live Demo: <a href="https://technicaltestpointstar.onrender.com/">https://techni
    - Rationale: Separation of concrn between service layer where business rules do in here. The repository layers handle database operations
 3. Secure HttpOnly cookie for refresh token
    - Rationale:I am thinking of preventing XSS attacks.
-4. Putting the
 
 ### Frontend Architecture
 
@@ -43,7 +80,7 @@ Github offers free AI models that developers could use to develop a generative A
 2. With copilot pro. I could have 8000 tokens in and 4000 tokens out per request
 3. Easy integration. they offer a great documentation: <a href="https://github.com/marketplace/models/azure-openai/gpt-4o-mini">https://github.com/marketplace/models/azure-openai/gpt-4o-mini</a>
 
-## Overview
+# Backend Documentation
 
 This document provides a comprehensive overview of the server-side of the **Notes App with Artificial Intelligence**. The server is built with Node.js and Express.js, and it uses a PostgreSQL database with Prisma as the ORM.
 
@@ -222,9 +259,14 @@ _NOTES_ all of the note api needs to have authentication
     ```
 - **`POST /api/v1/refresh`\***: will return a new token and if refhresh token is expired will return error
 
-  ```
+  - Example return body
 
-  ```
+    ```
+        {
+            "success": true,
+            "accessToken": "" //usable token
+        }
+    ```
 
 - **`GET /api/v1/note`**: Get all the notes for the authenticated user.
 
@@ -462,8 +504,6 @@ Test Coverage:
 ## Overview
 
 This is the frontend for the Smart Notes AI application, a modern, responsive web app built with React and Vite. It features full CRUD functionality for notes, a secure JWT-based authentication system, and an AI-powered summarization feature to enhance user productivity.
-
-## Features
 
 ### Secure Authentication:
 
