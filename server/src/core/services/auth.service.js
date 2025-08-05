@@ -47,7 +47,7 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
 
       // Create user record in DB
       const user = await authServiceRepository.create({
-        email,
+        email: email.toLowerCase(),
         name,
         username,
         password: hashedPassword,
@@ -119,6 +119,7 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
      * Logs in a user and issues access and refresh tokens.
      */
     async loginUser({ email, password }) {
+      email = email.toLowerCase();
       const user = await authServiceRepository.findByEmail({ email });
 
       if (!user) {
@@ -289,6 +290,7 @@ export function makeAuthService({ authServiceRepository, env, mailerService }) {
      * Initiates password reset via email with reset token.
      */
     async forgetPasswordEmail({ email }) {
+      email = email.toLowerCase();
       const user = await authServiceRepository.findByEmail({ email });
 
       if (!user) {
